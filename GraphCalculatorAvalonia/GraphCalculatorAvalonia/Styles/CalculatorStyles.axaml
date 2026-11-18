@@ -1,0 +1,121 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="TextBlock.caption">
+        <Setter Property="Foreground" Value="#64748B" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style Selector="Border.function-card">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="#E2E8F0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+    <Style Selector="Border.function-card:pointerover">
+        <Setter Property="BorderBrush" Value="#B8C8E3" />
+    </Style>
+
+    <Style Selector="TextBox.expression">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="Padding" Value="6,5" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.add-function">
+        <Setter Property="Background" Value="#2563EB" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.add-function:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#1D4ED8" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.add-function:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#1E40AF" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="Button.delete-function">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#94A3B8" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.delete-function:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#FEF2F2" />
+        <Setter Property="Foreground" Value="#DC2626" />
+    </Style>
+
+    <Style Selector="ToggleButton.visibility">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="16" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="#CBD5E1" />
+        <Setter Property="Background" Value="#F1F5F9" />
+        <Setter Property="Foreground" Value="#94A3B8" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="ToggleButton.visibility Ellipse">
+        <Setter Property="Opacity" Value="0.25" />
+    </Style>
+    <Style Selector="ToggleButton.visibility:checked Ellipse">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="ToggleButton.visibility:checked /template/ ContentPresenter">
+        <Setter Property="Background" Value="#F1F5F9" />
+        <Setter Property="BorderBrush" Value="#94A3B8" />
+    </Style>
+    <Style Selector="ToggleButton.visibility:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#E2E8F0" />
+        <Setter Property="Foreground" Value="#475569" />
+    </Style>
+    <Style Selector="ToggleButton.visibility:checked:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#E2E8F0" />
+    </Style>
+
+    <Style Selector="Button.color-picker, Button.color-swatch">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.color-picker:pointerover /template/ ContentPresenter, Button.color-swatch:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#E2E8F0" />
+    </Style>
+
+    <Style Selector="GridSplitter.panel-divider">
+        <Setter Property="Background" Value="#E2E8F0" />
+    </Style>
+    <Style Selector="GridSplitter.panel-divider:pointerover">
+        <Setter Property="Background" Value="#93C5FD" />
+    </Style>
+</Styles>

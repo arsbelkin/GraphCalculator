@@ -1,22 +1,148 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:GraphCalculatorAvalonia.ViewModels"
+        xmlns:palette="using:GraphCalculatorAvalonia.Styles"
+        xmlns:media="using:Avalonia.Media"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
         x:Class="GraphCalculatorAvalonia.Views.MainWindow"
         x:DataType="vm:MainViewModel"
+        x:CompileBindings="True"
         Icon="/Assets/avalonia-logo.ico"
-        Title="GraphCalculatorAvalonia">
+        Title="Графический калькулятор"
+        Width="1100" Height="700"
+        MinWidth="720" MinHeight="400"
+        Background="#F3F6FB" Foreground="#0F172A">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainViewModel />
     </Design.DataContext>
+    <Window.Styles>
+        <StyleInclude Source="/Styles/CalculatorStyles.axaml" />
+    </Window.Styles>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340" MinWidth="260" />
+            <ColumnDefinition Width="4" />
+            <ColumnDefinition Width="*" MinWidth="280" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Background="#F8FAFC">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16" Spacing="12">
+                        <ItemsControl ItemsSource="{Binding Functions}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Spacing="12" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:FunctionViewModel">
+                                    <Border Classes="function-card">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                            <ToggleButton Classes="visibility" Margin="0,0,6,0"
+                                                          IsChecked="{Binding IsVisible, Mode=OneWay}"
+                                                          Command="{Binding ChangeVisibilityCommand}"
+                                                          ToolTip.Tip="Показать или скрыть график функции"
+                                                          AutomationProperties.Name="Видимость функции">
+                                                <Ellipse Width="12" Height="12"
+                                                         HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Ellipse.Fill>
+                                                        <SolidColorBrush Color="{Binding GraphColor}" />
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                            </ToggleButton>
+                                            <TextBox Classes="expression" Grid.Column="1" Text="{Binding Expression, Mode=TwoWay}"
+                                                     PlaceholderText="y = f(x)"
+                                                     AutomationProperties.Name="Выражение функции" />
+                                            <Button Classes="color-picker" Grid.Column="2" Margin="4,0,0,0"
+                                                    ToolTip.Tip="Выбрать цвет графика"
+                                                    AutomationProperties.Name="Выбрать цвет графика">
+                                                <Ellipse Width="16" Height="16">
+                                                    <Ellipse.Fill>
+                                                        <SolidColorBrush Color="{Binding GraphColor}" />
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <Button.Flyout>
+                                                    <Flyout Placement="Bottom">
+                                                        <StackPanel Spacing="12">
+                                                            <TextBlock Text="Цвет графика" FontWeight="SemiBold" />
+                                                            <ItemsControl ItemsSource="{x:Static palette:GraphPalette.PaletteColors}">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <StackPanel Orientation="Horizontal" Spacing="8" />
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate x:DataType="media:Color">
+                                                                        <Button Classes="color-swatch"
+                                                                                AutomationProperties.Name="{Binding}"
+                                                                                ToolTip.Tip="{Binding}"
+                                                                                Command="{Binding $parent[ItemsControl].((vm:FunctionViewModel)DataContext).SetColorCommand}"
+                                                                                CommandParameter="{Binding}">
+                                                                            <Ellipse Width="20" Height="20">
+                                                                                <Ellipse.Fill>
+                                                                                    <SolidColorBrush Color="{Binding}" />
+                                                                                </Ellipse.Fill>
+                                                                            </Ellipse>
+                                                                        </Button>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </StackPanel>
+                                                    </Flyout>
+                                                </Button.Flyout>
+                                            </Button>
+                                            <Button Classes="delete-function" Grid.Column="3" Content="×" Margin="4,0,0,0"
+                                                    ToolTip.Tip="Удалить функцию"
+                                                    AutomationProperties.Name="Удалить функцию"
+                                                    Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).DeleteFunctionCommand}"
+                                                    CommandParameter="{Binding}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Classes="add-function" Command="{Binding AddFunctionCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Path Data="M 0,6 L 12,6 M 6,0 L 6,12" Stroke="White"
+                                      StrokeThickness="1.5" Width="12" Height="12"
+                                      VerticalAlignment="Center" />
+                                <TextBlock Text="Добавить функцию" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+        </Border>
 
-    <TextBox Text="{Binding Greeting}"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center" />
+        <GridSplitter Classes="panel-divider" Grid.Column="1" ResizeDirection="Columns"
+                      ResizeBehavior="PreviousAndNext"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
+        <!-- Replace this placeholder with a graph control when plotting is implemented. -->
+        <Border Grid.Column="2" Background="White" Margin="24"
+                BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="16">
+            <Grid RowDefinitions="Auto,*">
+                <Border Padding="20,16" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                    <TextBlock Text="График" FontSize="16" FontWeight="SemiBold" />
+                </Border>
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Margin="24" Spacing="12" MaxWidth="320">
+                    <Border Background="#EFF6FF" CornerRadius="20" Width="80" Height="80"
+                            HorizontalAlignment="Center" Margin="0,0,0,8">
+                        <TextBlock Text="ƒ(x)" FontSize="32" Foreground="#2563EB"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="Место для ваших графиков" FontSize="22" FontWeight="SemiBold"
+                               TextAlignment="Center" TextWrapping="Wrap" />
+                    <TextBlock Classes="caption" Text="Здесь появятся координатная сетка и графики функций."
+                               TextAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
