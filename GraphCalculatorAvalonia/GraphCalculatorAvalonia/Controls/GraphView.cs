@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using GraphCalculatorAvalonia.Models;
+using GraphCalculatorAvalonia.Styles;
 
 namespace GraphCalculatorAvalonia.Controls;
 
@@ -20,12 +22,18 @@ public class GraphView : Control
     private static readonly IBrush LabelBrush = Brush.Parse("#64748B");
     private static readonly Typeface LabelTypeface = new("Inter");
 
-    private static Pen GraphPen = new(Brushes.Blue);
-
     private Point center;
     private double pixelsPerUnit = DefaultScale;
     private Point lastPointerPosition;
     private IPointer? dragPointer;
+
+    private readonly List<(GraphFunction Function, Color Color)> _graphData = new()
+    {
+        (new GraphFunction(x => x * x), GraphPalette.Blue),
+        (new GraphFunction(x => Math.Sin(x)), GraphPalette.Red),
+        (new GraphFunction(x => x), GraphPalette.Green),
+        (new GraphFunction(x => 1 / x), GraphPalette.Purple)
+    };
 
     static GraphView()
     {
@@ -74,8 +82,12 @@ public class GraphView : Control
 
         if (area.Contains(origin))
             DrawLabel(context, "0", origin.X + 6, origin.Y + 6);
-        
-        DrawFunc(context, majorStep / 30, GraphPen);
+
+        foreach (var (function, color) in _graphData)
+        {
+            var pen = new Pen(new SolidColorBrush(color), 2);
+            DrawFunc(context, 1 / pixelsPerUnit, pen, function);
+        }
     }
 
     private void DrawGrid(DrawingContext context, double step, Pen pen, bool showLabels)
@@ -204,10 +216,8 @@ public class GraphView : Control
         }
     }
 
-    private void DrawFunc(DrawingContext context, double step, Pen pen)
+    private void DrawFunc(DrawingContext context, double step, Pen pen, GraphFunction function)
     {
-        var function = new GraphFunction(x => (x * x) / 10);
-
         Point topLeft = ScreenToWorld(default);
         Point bottomRight = ScreenToWorld(new Point(Bounds.Width, Bounds.Height));
 
@@ -219,8 +229,16 @@ public class GraphView : Control
             double x = index * step;
             double nextX = (index + 1) * step;
             
-            Point current = WorldToScreen(new Point(x, function.Evaluate(x)));
-            Point next = WorldToScreen(new Point(nextX, function.Evaluate(nextX)));
+            double y = function.Evaluate(x);
+            double nextY = function.Evaluate(nextX);
+            if (!double.IsFinite(y) || !double.IsFinite(nextY))
+                continue;
+
+            Point current = WorldToScreen(new Point(x, y));
+            Point next = WorldToScreen(new Point(nextX, nextY));
+            if (!double.IsFinite(current.X) || !double.IsFinite(current.Y) ||
+                !double.IsFinite(next.X) || !double.IsFinite(next.Y))
+                continue;
             
             context.DrawLine(pen, current, next);
         }
