@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using GraphCalculatorAvalonia.Models;
 
 namespace GraphCalculatorAvalonia.Controls;
 
@@ -18,6 +19,8 @@ public class GraphView : Control
     private static readonly Pen AxisPen = new(Brush.Parse("#64748B"), 1.5);
     private static readonly IBrush LabelBrush = Brush.Parse("#64748B");
     private static readonly Typeface LabelTypeface = new("Inter");
+
+    private static Pen GraphPen = new(Brushes.Blue);
 
     private Point center;
     private double pixelsPerUnit = DefaultScale;
@@ -71,6 +74,8 @@ public class GraphView : Control
 
         if (area.Contains(origin))
             DrawLabel(context, "0", origin.X + 6, origin.Y + 6);
+        
+        DrawFunc(context, majorStep / 30, GraphPen);
     }
 
     private void DrawGrid(DrawingContext context, double step, Pen pen, bool showLabels)
@@ -196,6 +201,28 @@ public class GraphView : Control
         {
             ResetView();
             e.Handled = true;
+        }
+    }
+
+    private void DrawFunc(DrawingContext context, double step, Pen pen)
+    {
+        var function = new GraphFunction(x => (x * x) / 10);
+
+        Point topLeft = ScreenToWorld(default);
+        Point bottomRight = ScreenToWorld(new Point(Bounds.Width, Bounds.Height));
+
+        double firstX = Math.Floor(topLeft.X / step);
+        double lastX = Math.Ceiling(bottomRight.X / step);
+
+        for (double index = firstX; index < lastX; index++)
+        {
+            double x = index * step;
+            double nextX = (index + 1) * step;
+            
+            Point current = WorldToScreen(new Point(x, function.Evaluate(x)));
+            Point next = WorldToScreen(new Point(nextX, function.Evaluate(nextX)));
+            
+            context.DrawLine(pen, current, next);
         }
     }
 }
