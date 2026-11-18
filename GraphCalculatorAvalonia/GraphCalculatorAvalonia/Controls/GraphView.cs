@@ -228,7 +228,7 @@ public class GraphView : Control
         {
             double x = index * step;
             double nextX = (index + 1) * step;
-            
+
             double y = function.Evaluate(x);
             double nextY = function.Evaluate(nextX);
             if (!double.IsFinite(y) || !double.IsFinite(nextY))
@@ -239,7 +239,7 @@ public class GraphView : Control
             if (!double.IsFinite(current.X) || !double.IsFinite(current.Y) ||
                 !double.IsFinite(next.X) || !double.IsFinite(next.Y))
                 continue;
-            
+
             context.DrawLine(pen, current, next);
         }
     }
