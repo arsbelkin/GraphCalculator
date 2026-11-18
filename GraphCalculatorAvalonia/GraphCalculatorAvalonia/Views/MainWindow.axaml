@@ -3,6 +3,7 @@
         xmlns:vm="using:GraphCalculatorAvalonia.ViewModels"
         xmlns:palette="using:GraphCalculatorAvalonia.Styles"
         xmlns:media="using:Avalonia.Media"
+        xmlns:controls="using:GraphCalculatorAvalonia.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
@@ -123,26 +124,6 @@
                       ResizeBehavior="PreviousAndNext"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-        <!-- Replace this placeholder with a graph control when plotting is implemented. -->
-        <Border Grid.Column="2" Background="White" Margin="24"
-                BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="16">
-            <Grid RowDefinitions="Auto,*">
-                <Border Padding="20,16" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
-                    <TextBlock Text="График" FontSize="16" FontWeight="SemiBold" />
-                </Border>
-                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Margin="24" Spacing="12" MaxWidth="320">
-                    <Border Background="#EFF6FF" CornerRadius="20" Width="80" Height="80"
-                            HorizontalAlignment="Center" Margin="0,0,0,8">
-                        <TextBlock Text="ƒ(x)" FontSize="32" Foreground="#2563EB"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <TextBlock Text="Место для ваших графиков" FontSize="22" FontWeight="SemiBold"
-                               TextAlignment="Center" TextWrapping="Wrap" />
-                    <TextBlock Classes="caption" Text="Здесь появятся координатная сетка и графики функций."
-                               TextAlignment="Center" />
-                </StackPanel>
-            </Grid>
-        </Border>
+        <controls:GraphView Grid.Column="2" AutomationProperties.Name="Координатная плоскость" />
     </Grid>
 </Window>
