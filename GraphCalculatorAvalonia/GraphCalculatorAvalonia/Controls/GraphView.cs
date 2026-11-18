@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using GraphCalculatorAvalonia.Models;
-using GraphCalculatorAvalonia.Styles;
+using GraphCalculatorAvalonia.ViewModels;
 
 namespace GraphCalculatorAvalonia.Controls;
 
@@ -27,17 +30,22 @@ public class GraphView : Control
     private Point lastPointerPosition;
     private IPointer? dragPointer;
 
-    private readonly List<(GraphFunction Function, Color Color)> _graphData = new()
+    private bool isAttached;
+    private ObservableCollection<FunctionViewModel>? observedFunctions;
+    private readonly HashSet<FunctionViewModel> subscribedFunctions = new();
+
+    public static readonly StyledProperty<ObservableCollection<FunctionViewModel>?> FunctionsProperty =
+        AvaloniaProperty.Register<GraphView, ObservableCollection<FunctionViewModel>?>(nameof(Functions));
+
+    public ObservableCollection<FunctionViewModel>? Functions
     {
-        (new GraphFunction(x => x * x), GraphPalette.Blue),
-        (new GraphFunction(x => Math.Sin(x)), GraphPalette.Red),
-        (new GraphFunction(x => x), GraphPalette.Green),
-        (new GraphFunction(x => 1 / x), GraphPalette.Purple)
-    };
+        get => GetValue(FunctionsProperty);
+        set => SetValue(FunctionsProperty, value);
+    }
 
     static GraphView()
     {
-        AffectsRender<GraphView>(BoundsProperty);
+        AffectsRender<GraphView>(BoundsProperty, FunctionsProperty);
     }
 
     public GraphView()
@@ -45,6 +53,66 @@ public class GraphView : Control
         ClipToBounds = true;
         Focusable = true;
         Cursor = new Cursor(StandardCursorType.Cross);
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        isAttached = true;
+        ObserveFunctions(Functions);
+        InvalidateVisual();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        isAttached = false;
+        ObserveFunctions(null);
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == FunctionsProperty && isAttached)
+            ObserveFunctions(Functions);
+    }
+
+    private void ObserveFunctions(ObservableCollection<FunctionViewModel>? functions)
+    {
+        if (observedFunctions is not null)
+            observedFunctions.CollectionChanged -= OnFunctionsCollectionChanged;
+
+        foreach (var item in subscribedFunctions)
+            item.PropertyChanged -= OnFunctionPropertyChanged;
+        subscribedFunctions.Clear();
+
+        observedFunctions = functions;
+        if (functions is null)
+            return;
+
+        functions.CollectionChanged += OnFunctionsCollectionChanged;
+        foreach (var item in functions)
+        {
+            if (subscribedFunctions.Add(item))
+                item.PropertyChanged += OnFunctionPropertyChanged;
+        }
+    }
+
+    private void OnFunctionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        ObserveFunctions(observedFunctions);
+        InvalidateVisual();
+    }
+
+    private void OnFunctionPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(e.PropertyName) ||
+            e.PropertyName is nameof(FunctionViewModel.Function)
+                or nameof(FunctionViewModel.GraphColor)
+                or nameof(FunctionViewModel.IsVisible))
+        {
+            InvalidateVisual();
+        }
     }
 
     public Point WorldToScreen(Point point) => new(
@@ -83,10 +151,16 @@ public class GraphView : Control
         if (area.Contains(origin))
             DrawLabel(context, "0", origin.X + 6, origin.Y + 6);
 
-        foreach (var (function, color) in _graphData)
+        if (Functions is null)
+            return;
+
+        foreach (var item in Functions)
         {
-            var pen = new Pen(new SolidColorBrush(color), 2);
-            DrawFunc(context, 1 / pixelsPerUnit, pen, function);
+            if (!item.IsVisible || item.Function == null)
+                continue;
+
+            var pen = new Pen(new SolidColorBrush(item.GraphColor), 2);
+            DrawFunc(context, 1 / pixelsPerUnit, pen, item.Function);
         }
     }
 

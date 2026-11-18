@@ -124,6 +124,6 @@
                       ResizeBehavior="PreviousAndNext"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-        <controls:GraphView Grid.Column="2" AutomationProperties.Name="Координатная плоскость" />
+        <controls:GraphView Grid.Column="2" Functions="{Binding Functions}" AutomationProperties.Name="Координатная плоскость" />
     </Grid>
 </Window>
