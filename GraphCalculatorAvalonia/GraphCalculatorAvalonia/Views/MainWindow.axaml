@@ -57,7 +57,7 @@
                                                 </Ellipse>
                                             </ToggleButton>
                                             <TextBox Classes="expression" Grid.Column="1" Text="{Binding Expression, Mode=TwoWay}"
-                                                     PlaceholderText="y = f(x)"
+                                                     PlaceholderText="f(x)"
                                                      AutomationProperties.Name="Выражение функции" />
                                             <Button Classes="color-picker" Grid.Column="2" Margin="4,0,0,0"
                                                     ToolTip.Tip="Выбрать цвет графика"
