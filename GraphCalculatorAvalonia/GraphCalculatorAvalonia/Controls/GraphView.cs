@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using Avalonia;
@@ -118,7 +119,7 @@ public class GraphView : Control
                 continue;
 
             var pen = new Pen(new SolidColorBrush(item.GraphColor), 2);
-            DrawFunc(context, 1 / pixelsPerUnit, pen, item.Function);
+            DrawFuncWithStack(context, 1 / pixelsPerUnit, pen, item.Function);
         }
     }
 
@@ -248,7 +249,8 @@ public class GraphView : Control
         }
     }
 
-    private void DrawFunc(DrawingContext context, double step, Pen pen, GraphFunction function)
+    private void DrawFuncWithStack(DrawingContext context, double step, Pen pen, GraphFunction function,
+        int maxLevels = 10)
     {
         Point topLeft = ScreenToWorld(default);
         Point bottomRight = ScreenToWorld(new Point(Bounds.Width, Bounds.Height));
@@ -256,33 +258,48 @@ public class GraphView : Control
         double firstX = Math.Floor(topLeft.X / step);
         double lastX = Math.Ceiling(bottomRight.X / step);
 
+        var stack = new Stack<(double Left, double Right, int Depth)>();
+
         for (double index = firstX; index < lastX; index++)
         {
-            double x = index * step;
-            double nextX = (index + 1) * step;
+            stack.Push((index * step, (index + 1) * step, 0));
 
-            double y = function.Evaluate(x);
-            double nextY = function.Evaluate(nextX);
-            if (!double.IsFinite(y) || !double.IsFinite(nextY))
-                continue;
-            
-            Point current = WorldToScreen(new Point(x, y));
-            Point next = WorldToScreen(new Point(nextX, nextY));
-            if (!double.IsFinite(current.X) || !double.IsFinite(current.Y) ||
-                !double.IsFinite(next.X) || !double.IsFinite(next.Y))
-                continue;
-            
-            double expectedY = (current.Y + next.Y) / 2;
-            double midX = x + (nextX - x) / 2;
-            double midY = function.Evaluate(midX);
-            Point midPoint = WorldToScreen(new Point(midX, midY));
-
-            if (Math.Abs(midPoint.Y - expectedY) > 0.75)
+            while (stack.Count != 0)
             {
-                continue;
-            }
+                var (left, right, depth) = stack.Pop();
+                
+                double y = function.Evaluate(left);
+                double nextY = function.Evaluate(right);
+                if (!double.IsFinite(y) || !double.IsFinite(nextY))
+                    continue;
 
-            context.DrawLine(pen, current, next);
+                Point current = WorldToScreen(new Point(left, y));
+                Point next = WorldToScreen(new Point(right, nextY));
+                if (!double.IsFinite(current.X) || !double.IsFinite(current.Y) ||
+                    !double.IsFinite(next.X) || !double.IsFinite(next.Y))
+                    continue;
+
+                double expectedY = (current.Y + next.Y) / 2;
+                double midX = left + (right - left) / 2;
+                double midY = function.Evaluate(midX);
+                Point midPoint = WorldToScreen(new Point(midX, midY));
+
+                if (!double.IsFinite(midY) || !double.IsFinite(midPoint.X) || !double.IsFinite(midPoint.Y))
+                    continue;
+
+                if (Math.Abs(midPoint.Y - expectedY) > 0.6)
+                {
+                    if (depth < maxLevels)
+                    {
+                        stack.Push((midX, right, depth + 1));
+                        stack.Push((left, midX, depth + 1));
+                    }
+                    
+                    continue;
+                }
+                
+                context.DrawLine(pen, current, next);
+            }
         }
     }
 }
