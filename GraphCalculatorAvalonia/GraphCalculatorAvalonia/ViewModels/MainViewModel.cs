@@ -6,7 +6,7 @@ namespace GraphCalculatorAvalonia.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private int nextColorIndex;
+    private int _nextColorIndex;
 
     public ObservableCollection<FunctionViewModel> Functions { get; } = new();
 
@@ -20,9 +20,9 @@ public partial class MainViewModel : ViewModelBase
     {
         Functions.Add(new FunctionViewModel
         {
-            GraphColor = GraphPalette.PaletteColors[nextColorIndex],
+            GraphColor = GraphPalette.PaletteColors[_nextColorIndex],
         });
-        nextColorIndex = (nextColorIndex + 1) % GraphPalette.PaletteColors.Count;
+        _nextColorIndex = (_nextColorIndex + 1) % GraphPalette.PaletteColors.Count;
     }
     
     [RelayCommand]
