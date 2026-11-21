@@ -265,12 +265,22 @@ public class GraphView : Control
             double nextY = function.Evaluate(nextX);
             if (!double.IsFinite(y) || !double.IsFinite(nextY))
                 continue;
-
+            
             Point current = WorldToScreen(new Point(x, y));
             Point next = WorldToScreen(new Point(nextX, nextY));
             if (!double.IsFinite(current.X) || !double.IsFinite(current.Y) ||
                 !double.IsFinite(next.X) || !double.IsFinite(next.Y))
                 continue;
+            
+            double expectedY = (current.Y + next.Y) / 2;
+            double midX = x + (nextX - x) / 2;
+            double midY = function.Evaluate(midX);
+            Point midPoint = WorldToScreen(new Point(midX, midY));
+
+            if (Math.Abs(midPoint.Y - expectedY) > 0.75)
+            {
+                continue;
+            }
 
             context.DrawLine(pen, current, next);
         }
