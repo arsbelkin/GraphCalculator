@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using GraphCalculatorAvalonia.Collections;
 using GraphCalculatorAvalonia.Models;
 using GraphCalculatorAvalonia.ViewModels;
 
@@ -30,9 +28,7 @@ public class GraphView : Control
     private Point lastPointerPosition;
     private IPointer? dragPointer;
 
-    private bool isAttached;
-    private ObservableCollection<FunctionViewModel>? observedFunctions;
-    private readonly HashSet<FunctionViewModel> subscribedFunctions = new();
+    private FunctionCollectionObserver? _observer;
 
     public static readonly StyledProperty<ObservableCollection<FunctionViewModel>?> FunctionsProperty =
         AvaloniaProperty.Register<GraphView, ObservableCollection<FunctionViewModel>?>(nameof(Functions));
@@ -58,61 +54,23 @@ public class GraphView : Control
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        isAttached = true;
-        ObserveFunctions(Functions);
+        _observer = new FunctionCollectionObserver(Functions, InvalidateVisual);
         InvalidateVisual();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        isAttached = false;
-        ObserveFunctions(null);
+        _observer?.Dispose();
+        _observer = null;
+
         base.OnDetachedFromVisualTree(e);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == FunctionsProperty && isAttached)
-            ObserveFunctions(Functions);
-    }
-
-    private void ObserveFunctions(ObservableCollection<FunctionViewModel>? functions)
-    {
-        if (observedFunctions is not null)
-            observedFunctions.CollectionChanged -= OnFunctionsCollectionChanged;
-
-        foreach (var item in subscribedFunctions)
-            item.PropertyChanged -= OnFunctionPropertyChanged;
-        subscribedFunctions.Clear();
-
-        observedFunctions = functions;
-        if (functions is null)
-            return;
-
-        functions.CollectionChanged += OnFunctionsCollectionChanged;
-        foreach (var item in functions)
-        {
-            if (subscribedFunctions.Add(item))
-                item.PropertyChanged += OnFunctionPropertyChanged;
-        }
-    }
-
-    private void OnFunctionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        ObserveFunctions(observedFunctions);
-        InvalidateVisual();
-    }
-
-    private void OnFunctionPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (string.IsNullOrEmpty(e.PropertyName) ||
-            e.PropertyName is nameof(FunctionViewModel.Function)
-                or nameof(FunctionViewModel.GraphColor)
-                or nameof(FunctionViewModel.IsVisible))
-        {
-            InvalidateVisual();
-        }
+        if (change.Property == FunctionsProperty)
+            _observer?.SetSource(Functions);
     }
 
     public Point WorldToScreen(Point point) => new(

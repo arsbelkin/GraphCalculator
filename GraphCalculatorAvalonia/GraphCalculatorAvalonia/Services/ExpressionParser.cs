@@ -15,7 +15,7 @@ public static class ExpressionParser
 
             return new GraphFunction(evaluate);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return null;
         }
