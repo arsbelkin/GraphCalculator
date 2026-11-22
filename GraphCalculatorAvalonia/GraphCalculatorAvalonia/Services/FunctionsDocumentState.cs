@@ -6,7 +6,7 @@ namespace GraphCalculatorAvalonia.Services;
 
 public sealed record FunctionsSnapshot(string Json, bool HasContent);
 
-/// <summary>Compares the current document with the last successfully saved or loaded snapshot.</summary>
+
 public sealed class FunctionsDocumentState
 {
     private FunctionsSnapshot? savedSnapshot;

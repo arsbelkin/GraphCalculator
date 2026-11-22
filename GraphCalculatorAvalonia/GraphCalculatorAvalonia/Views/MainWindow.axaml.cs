@@ -22,7 +22,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        // Handle the shortcut even while an expression or a numeric field has focus.
         AddHandler(KeyDownEvent, OnWindowKeyDown, RoutingStrategies.Tunnel, handledEventsToo: true);
         Closed += (_, _) => currentFile?.Dispose();
     }
@@ -80,7 +79,7 @@ public partial class MainWindow : Window
                 currentFile?.Dispose();
                 currentFile = target;
             }
-            // Only mark the exact snapshot written to disk as saved, after closing the stream.
+            
             documentState.MarkSaved(snapshot);
             UpdateFileTitle();
             SetFileStatus($"Сохранено: {target.Name}", false);

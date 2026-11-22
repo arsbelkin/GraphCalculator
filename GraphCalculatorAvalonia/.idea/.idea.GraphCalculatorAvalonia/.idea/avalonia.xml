@@ -7,6 +7,7 @@
         <entry key="GraphCalculatorAvalonia/Styles/CalculatorStyles.axaml" value="GraphCalculatorAvalonia/GraphCalculatorAvalonia.csproj" />
         <entry key="GraphCalculatorAvalonia/Views/LoadFunctionsWindow.axaml" value="GraphCalculatorAvalonia/GraphCalculatorAvalonia.csproj" />
         <entry key="GraphCalculatorAvalonia/Views/MainWindow.axaml" value="GraphCalculatorAvalonia/GraphCalculatorAvalonia.csproj" />
+        <entry key="GraphCalculatorAvalonia/Views/SaveChangesWindow.axaml" value="GraphCalculatorAvalonia/GraphCalculatorAvalonia.csproj" />
       </map>
     </option>
   </component>

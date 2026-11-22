@@ -13,7 +13,6 @@ using GraphCalculatorAvalonia.ViewModels;
 
 namespace GraphCalculatorAvalonia.Views;
 
-// The main window owns the storage file after a successful load, allowing subsequent Ctrl+S.
 public sealed record LoadedFunctionsResult(IStorageFile File, IReadOnlyList<FunctionViewModel> Functions);
 
 public partial class LoadFunctionsWindow : Window
