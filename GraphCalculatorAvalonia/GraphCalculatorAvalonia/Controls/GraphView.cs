@@ -249,7 +249,7 @@ public class GraphView : Control
         }
     }
 
-    private void DrawFuncWithStack(DrawingContext context, double step, Pen pen, GraphFunction function,
+    private void DrawFuncWithStack(DrawingContext context, double step, Pen pen, FunctionModel functionModel,
         int maxLevels = 10)
     {
         Point topLeft = ScreenToWorld(default);
@@ -268,8 +268,8 @@ public class GraphView : Control
             {
                 var (left, right, depth) = stack.Pop();
                 
-                double y = function.Evaluate(left);
-                double nextY = function.Evaluate(right);
+                double y = functionModel.Evaluate(left);
+                double nextY = functionModel.Evaluate(right);
                 if (!double.IsFinite(y) || !double.IsFinite(nextY))
                     continue;
 
@@ -281,7 +281,7 @@ public class GraphView : Control
 
                 double expectedY = (current.Y + next.Y) / 2;
                 double midX = left + (right - left) / 2;
-                double midY = function.Evaluate(midX);
+                double midY = functionModel.Evaluate(midX);
                 Point midPoint = WorldToScreen(new Point(midX, midY));
 
                 if (!double.IsFinite(midY) || !double.IsFinite(midPoint.X) || !double.IsFinite(midPoint.Y))
