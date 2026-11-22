@@ -22,4 +22,13 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
         <PackageReference Include="MathNet.Symbolics" Version="0.25.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\LoadFunctionsWindow.axaml.cs">
+        <DependentUpon>LoadFunctionsWindow.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\SaveChangesWindow.axaml.cs">
+        <DependentUpon>SaveChangesWindow.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

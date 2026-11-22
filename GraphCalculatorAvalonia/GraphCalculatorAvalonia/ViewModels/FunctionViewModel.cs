@@ -81,4 +81,25 @@ public partial class FunctionViewModel : ViewModelBase
                 parameter => parameter.Title, parameter => parameter.Value));
         }
     }
+
+    internal void RestoreParameters(System.Collections.Generic.IEnumerable<SavedParameter> savedParameters)
+    {
+        foreach (var saved in savedParameters)
+        {
+            var parameter = Parameters.FirstOrDefault(item => item.Title == saved.Name);
+            if (parameter is null)
+            {
+                parameter = new FunctionParameterModelView { Title = saved.Name };
+                parameter.PropertyChanged += OnParameterChanged;
+                Parameters.Add(parameter);
+            }
+            
+            parameter.MinValue = System.Math.Min(parameter.MinValue, saved.Minimum);
+            parameter.MaxValue = System.Math.Max(parameter.MaxValue, saved.Maximum);
+            parameter.MinValue = saved.Minimum;
+            parameter.MaxValue = saved.Maximum;
+            parameter.Value = saved.Value;
+        }
+        OnPropertyChanged(nameof(HasParameters));
+    }
 }

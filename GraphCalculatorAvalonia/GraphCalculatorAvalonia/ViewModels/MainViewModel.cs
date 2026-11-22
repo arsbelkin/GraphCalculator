@@ -30,4 +30,13 @@ public partial class MainViewModel : ViewModelBase
     {
         Functions.Remove(function);
     }
+
+    public void ReplaceFunctions(System.Collections.Generic.IEnumerable<FunctionViewModel> functions)
+    {
+        var restored = new System.Collections.Generic.List<FunctionViewModel>(functions);
+        Functions.Clear();
+        foreach (var function in restored)
+            Functions.Add(function);
+        _nextColorIndex = Functions.Count % GraphPalette.PaletteColors.Count;
+    }
 }

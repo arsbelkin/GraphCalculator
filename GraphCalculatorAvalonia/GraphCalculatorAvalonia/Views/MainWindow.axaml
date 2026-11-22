@@ -31,7 +31,23 @@
             <ColumnDefinition Width="*" MinWidth="280" />
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" Background="#F8FAFC">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+            <Grid RowDefinitions="Auto,*">
+                <StackPanel Margin="16,10" Spacing="6">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button x:Name="SaveFunctionsButton" Classes="file-action" Click="OnSaveFunctionsClick"
+                                ToolTip.Tip="Сохранить функции (Ctrl+S)" AutomationProperties.Name="Сохранить функции">
+                            <Path Data="M 3,2 L 19,2 L 22,5 L 22,22 L 2,22 L 2,2 Z M 6,2 L 6,9 L 17,9 L 17,2 M 6,22 L 6,14 L 18,14 L 18,22"
+                                  Stroke="#475569" StrokeThickness="1.6" Width="20" Height="20" Stretch="Uniform" />
+                        </Button>
+                        <Button x:Name="LoadFunctionsButton" Classes="file-action" Click="OnLoadFunctionsClick"
+                                ToolTip.Tip="Загрузить функции" AutomationProperties.Name="Загрузить функции">
+                            <Path Data="M 2,20 L 2,5 L 10,5 L 12,8 L 22,8 L 22,20 Z M 2,20 L 6,11 L 24,11 L 20,20 Z"
+                                  Stroke="#475569" StrokeThickness="1.6" Width="22" Height="20" Stretch="Uniform" />
+                        </Button>
+                    </StackPanel>
+                    <TextBlock x:Name="FileStatus" IsVisible="False" Classes="caption" />
+                </StackPanel>
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="16" Spacing="12">
                         <ItemsControl ItemsSource="{Binding Functions}">
@@ -167,6 +183,7 @@
                         </Button>
                     </StackPanel>
                 </ScrollViewer>
+            </Grid>
         </Border>
 
         <GridSplitter Classes="panel-divider" Grid.Column="1" ResizeDirection="Columns"

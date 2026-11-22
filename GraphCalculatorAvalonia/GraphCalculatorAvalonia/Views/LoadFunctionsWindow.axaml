@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GraphCalculatorAvalonia.Views.LoadFunctionsWindow"
+        Title="Загрузить функции" Width="520" Height="390" MinWidth="400" MinHeight="350"
+        CanResize="False" WindowStartupLocation="CenterOwner"
+        Background="#F8FAFC" Foreground="#0F172A">
+    <Window.Styles>
+        <StyleInclude Source="/Styles/CalculatorStyles.axaml" />
+        <Style Selector="Border.drop-zone.dragover">
+            <Setter Property="Background" Value="#DBEAFE" />
+            <Setter Property="BorderBrush" Value="#2563EB" />
+        </Style>
+    </Window.Styles>
+    <Grid Margin="24" RowDefinitions="Auto,*,Auto,Auto">
+        <StackPanel Spacing="6" Margin="0,0,0,20">
+            <TextBlock Text="Загрузить функции" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Classes="caption" Text="Текущий список будет заменён содержимым файла." />
+        </StackPanel>
+        <Border x:Name="DropZone" Classes="drop-zone" Grid.Row="1"
+                DragDrop.AllowDrop="True" Background="White" BorderBrush="#CBD5E1"
+                BorderThickness="2" CornerRadius="14" Padding="20">
+            <StackPanel VerticalAlignment="Center" Spacing="14">
+                <Path Data="M 2,14 L 2,20 L 22,20 L 22,14 M 12,15 L 12,2 M 7,7 L 12,2 L 17,7"
+                      Stroke="#2563EB" StrokeThickness="1.8" Width="28" Height="28"
+                      Stretch="Uniform" HorizontalAlignment="Center" />
+                <TextBlock Text="Перетащите сюда JSON-файл" TextWrapping="Wrap" TextAlignment="Center"
+                           FontSize="16" FontWeight="SemiBold" />
+                <Button x:Name="ChooseFileButton" Classes="add-function" Content="Выбрать файл"
+                        HorizontalAlignment="Center" Padding="20,8" Click="OnChooseFileClick" />
+            </StackPanel>
+        </Border>
+        <TextBlock x:Name="LoadError" Grid.Row="2" IsVisible="False" Foreground="#DC2626"
+                   TextWrapping="Wrap" FontSize="12" Margin="0,12,0,0" />
+        <Button Grid.Row="3" Content="Отмена" HorizontalAlignment="Right" Margin="0,16,0,0"
+                Click="OnCancelClick" />
+    </Grid>
+</Window>
