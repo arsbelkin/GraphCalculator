@@ -28,6 +28,13 @@ public static class ExpressionParser
                 .OrderBy(name => name, StringComparer.Ordinal)
                 .ToArray();
 
+            if (parameterNames.Any(pn => pn.Length != 1 ||
+                                         !(pn[0] is >= 'a' and <= 'z' or >= 'A' and <= 'Z')))
+            {
+                errorMessage = "Параметр должен быть одной латинской буквой.";
+                return null;
+            }
+
             if (parameterNames.Length > MaxParameterCount)
             {
                 errorMessage = "Можно использовать не более трёх параметров, не считая x.";
