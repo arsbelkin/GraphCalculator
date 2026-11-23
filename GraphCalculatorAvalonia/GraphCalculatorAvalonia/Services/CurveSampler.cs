@@ -31,6 +31,7 @@ public static class CurveSampler
 
         var stack = new Stack<(Point Left, Point Right, int Depth)>();
         Point left = Evaluate(0);
+        
         for (double screenX = 0; screenX < size.Width; screenX += 1)
         {
             Point right = Evaluate(Math.Min(screenX + 1, size.Width));
@@ -60,8 +61,10 @@ public static class CurveSampler
                         continue;
 
                     double expectedY = start.Y / 2 + end.Y / 2;
+                    
                     bool middleBetweenEndpoints = middle.Y >= Math.Min(start.Y, end.Y) &&
                                                   middle.Y <= Math.Max(start.Y, end.Y);
+                    
                     if (middleBetweenEndpoints && Math.Abs(middle.Y - expectedY) <= PixelTolerance)
                     {
                         segments.Add(new CurveSegment(ClipEndpoint(start, end, size.Height),

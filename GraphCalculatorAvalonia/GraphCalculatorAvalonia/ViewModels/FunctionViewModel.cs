@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Avalonia.Media;
 using GraphCalculatorAvalonia.Models;
@@ -82,7 +83,7 @@ public partial class FunctionViewModel : ViewModelBase
         }
     }
 
-    internal void RestoreParameters(System.Collections.Generic.IEnumerable<SavedParameter> savedParameters)
+    internal void RestoreParameters(IEnumerable<SavedParameter> savedParameters)
     {
         foreach (var saved in savedParameters)
         {

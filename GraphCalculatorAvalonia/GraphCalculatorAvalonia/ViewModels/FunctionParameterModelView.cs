@@ -1,42 +1,40 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace GraphCalculatorAvalonia.ViewModels;
+﻿namespace GraphCalculatorAvalonia.ViewModels;
 
 public class FunctionParameterModelView : ViewModelBase
 {
     public string Title { get; init; } = string.Empty;
 
-    private double minValue = -10;
-    private double maxValue = 10;
-    private double value = 1;
+    private double _minValue = -10;
+    private double _maxValue = 10;
+    private double _value = 1;
 
     public double MinValue
     {
-        get => minValue;
+        get => _minValue;
         set
         {
-            if (double.IsFinite(value) && SetProperty(ref minValue, System.Math.Min(value, MaxValue)))
+            if (double.IsFinite(value) && SetProperty(ref _minValue, System.Math.Min(value, MaxValue)))
                 Value = System.Math.Clamp(Value, MinValue, MaxValue);
         }
     }
 
     public double MaxValue
     {
-        get => maxValue;
+        get => _maxValue;
         set
         {
-            if (double.IsFinite(value) && SetProperty(ref maxValue, System.Math.Max(value, MinValue)))
+            if (double.IsFinite(value) && SetProperty(ref _maxValue, System.Math.Max(value, MinValue)))
                 Value = System.Math.Clamp(Value, MinValue, MaxValue);
         }
     }
 
     public double Value
     {
-        get => value;
+        get => _value;
         set
         {
             if (double.IsFinite(value))
-                SetProperty(ref this.value, System.Math.Clamp(value, MinValue, MaxValue));
+                SetProperty(ref this._value, System.Math.Clamp(value, MinValue, MaxValue));
         }
     }
 }

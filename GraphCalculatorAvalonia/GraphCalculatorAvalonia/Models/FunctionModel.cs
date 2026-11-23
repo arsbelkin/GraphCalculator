@@ -1,5 +1,4 @@
 ﻿using System;
-
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,8 +21,11 @@ public class FunctionModel
     {
         _parameterizedFunction = function;
         ParameterNames = Array.AsReadOnly((string[])parameterNames.Clone());
+
         double[] values = ParameterNames.Select(name =>
-            parameterValues is not null && parameterValues.TryGetValue(name, out var value) ? value : 1).ToArray();
+            parameterValues is not null 
+            && parameterValues.TryGetValue(name, out var value) ? value : 1).ToArray();
+        
         _function = x => function(x, values);
     }
 
@@ -31,6 +33,6 @@ public class FunctionModel
         _parameterizedFunction is null
             ? this
             : new FunctionModel(_parameterizedFunction, ParameterNames.ToArray(), values);
-    
+
     public double Evaluate(double x) => _function(x);
 }
