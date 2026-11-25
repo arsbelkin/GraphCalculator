@@ -33,23 +33,36 @@
         <Border Grid.Column="0" Background="#F8FAFC">
             <Grid RowDefinitions="Auto,*">
                 <StackPanel Margin="16,10" Spacing="6">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Grid ColumnDefinitions="Auto,Auto,*">
                         <Button x:Name="SaveFunctionsButton" Classes="file-action" Click="OnSaveFunctionsClick"
                                 ToolTip.Tip="Сохранить функции (Ctrl+S)" AutomationProperties.Name="Сохранить функции">
                             <Path Data="M 3,2 L 19,2 L 22,5 L 22,22 L 2,22 L 2,2 Z M 6,2 L 6,9 L 17,9 L 17,2 M 6,22 L 6,14 L 18,14 L 18,22"
                                   Stroke="#475569" StrokeThickness="1.6" Width="20" Height="20" Stretch="Uniform" />
                         </Button>
-                        <Button x:Name="LoadFunctionsButton" Classes="file-action" Click="OnLoadFunctionsClick"
+                        <Button x:Name="LoadFunctionsButton" Classes="file-action" Grid.Column="1" Margin="6,0,0,0"
+                                Click="OnLoadFunctionsClick"
                                 ToolTip.Tip="Загрузить функции" AutomationProperties.Name="Загрузить функции">
                             <Path Data="M 2,20 L 2,5 L 10,5 L 12,8 L 22,8 L 22,20 Z M 2,20 L 6,11 L 24,11 L 20,20 Z"
                                   Stroke="#475569" StrokeThickness="1.6" Width="22" Height="20" Stretch="Uniform" />
                         </Button>
-                    </StackPanel>
+                        <Button x:Name="StartAnimationButton" Classes="file-action play-animation"
+                                Classes.animating="{Binding IsAnimating}"
+                                Grid.Column="2" HorizontalAlignment="Right" Margin="6,0,0,0"
+                                Command="{Binding ProcessAnimationCommand}">
+                            <Grid Width="18" Height="18">
+                                <Path Classes="animation-play-icon" Data="M 5,3 L 21,12 L 5,21 Z"
+                                      Fill="{Binding $parent[Button].Foreground}" Stretch="Uniform" />
+                                <Path Classes="animation-pause-icon"
+                                      Data="M 3,2 L 8,2 L 8,22 L 3,22 Z M 16,2 L 21,2 L 21,22 L 16,22 Z"
+                                      Fill="{Binding $parent[Button].Foreground}" Stretch="Uniform" />
+                            </Grid>
+                        </Button>
+                    </Grid>
                     <TextBlock x:Name="FileStatus" IsVisible="False" Classes="caption" />
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="16" Spacing="12">
+                    <StackPanel Margin="16" Spacing="12" IsEnabled="{Binding !IsAnimating}">
                         <ItemsControl ItemsSource="{Binding Functions}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -175,7 +188,7 @@
                         <Button Classes="add-function" Command="{Binding AddFunctionCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="8"
                                         HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Path Data="M 0,6 L 12,6 M 6,0 L 6,12" Stroke="White"
+                                <Path Data="M 0,6 L 12,6 M 6,0 L 6,12" Stroke="{Binding $parent[Button].Foreground}"
                                       StrokeThickness="1.5" Width="12" Height="12"
                                       VerticalAlignment="Center" />
                                 <TextBlock Text="Добавить функцию" VerticalAlignment="Center" />

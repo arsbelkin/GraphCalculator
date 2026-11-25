@@ -26,8 +26,11 @@ public partial class MainWindow : Window
         Closed += (_, _) => currentFile?.Dispose();
     }
 
-    private async void OnSaveFunctionsClick(object? sender, RoutedEventArgs e) =>
+    private async void OnSaveFunctionsClick(object? sender, RoutedEventArgs e)
+    {
         await RunFileOperationAsync(async model => { await SaveDocumentAsync(model); });
+    }
+        
 
     private async void OnWindowKeyDown(object? sender, KeyEventArgs e)
     {
@@ -102,6 +105,8 @@ public partial class MainWindow : Window
 
     private async Task LoadDocumentAsync(MainViewModel model)
     {
+        model.StopAnimation();
+        
         if (!await ConfirmLoadAsync(model))
             return;
 

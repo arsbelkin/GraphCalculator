@@ -11,6 +11,54 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <Style Selector="Button.play-animation">
+        <Setter Property="Background" Value="#16A34A" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="ToolTip.Tip" Value="Анимировать все параметры от минимума до максимума за 5 секунд" />
+        <Setter Property="ToolTip.ShowOnDisabled" Value="True" />
+        <Setter Property="AutomationProperties.Name" Value="Запустить анимацию всех параметров" />
+    </Style>
+    <Style Selector="Button.play-animation:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#15803D" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="Button.play-animation:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#166534" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="Button.play-animation.animating">
+        <Setter Property="Background" Value="#DC2626" />
+        <Setter Property="ToolTip.Tip" Value="Остановить анимацию и вернуть прежние значения" />
+        <Setter Property="AutomationProperties.Name" Value="Остановить анимацию всех параметров" />
+    </Style>
+    <Style Selector="Button.play-animation.animating:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#B91C1C" />
+    </Style>
+    <Style Selector="Button.play-animation.animating:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#991B1B" />
+    </Style>
+    <Style Selector="Button.play-animation:disabled">
+        <Setter Property="Foreground" Value="#94A3B8" />
+        <Setter Property="Background" Value="#E8EEF6" />
+        <Setter Property="Cursor" Value="Arrow" />
+        <Setter Property="ToolTip.Tip" Value="Добавьте функцию с параметром" />
+    </Style>
+    <Style Selector="Button.play-animation:disabled /template/ ContentPresenter">
+        <Setter Property="Background" Value="#E8EEF6" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="#94A3B8" />
+    </Style>
+    <Style Selector="Button.play-animation Path.animation-pause-icon">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="Button.play-animation.animating Path.animation-play-icon">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="Button.play-animation.animating Path.animation-pause-icon">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
     <Style Selector="TextBlock.caption">
         <Setter Property="Foreground" Value="#64748B" />
         <Setter Property="FontSize" Value="13" />
@@ -148,6 +196,62 @@
     </Style>
     <Style Selector="Button.color-picker:pointerover /template/ ContentPresenter, Button.color-swatch:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="#E2E8F0" />
+    </Style>
+
+    <!-- Keep the animated values readable while the editor is locked. -->
+    <Style Selector="Border.function-card:disabled">
+        <Setter Property="Background" Value="#F8FAFC" />
+        <Setter Property="BorderBrush" Value="#DCE5EF" />
+    </Style>
+    <Style Selector="TextBox.expression:disabled">
+        <Setter Property="Foreground" Value="#475569" />
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+    <Style Selector="TextBox.expression:disabled /template/ Border#PART_BorderElement">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="NumericUpDown.parameter-number:disabled">
+        <Setter Property="Foreground" Value="#334155" />
+        <Setter Property="Background" Value="#EFF4F9" />
+        <Setter Property="BorderBrush" Value="#DFE7F0" />
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+    <Style Selector="NumericUpDown.parameter-number:disabled /template/ TextBox#PART_TextBox">
+        <Setter Property="Foreground" Value="#334155" />
+    </Style>
+    <Style Selector="NumericUpDown.parameter-number:disabled /template/ TextBox#PART_TextBox /template/ Border#PART_BorderElement">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="Slider.parameter-slider:disabled /template/ Thumb">
+        <Setter Property="Background" Value="{Binding $parent[Slider].Foreground}" />
+        <Setter Property="Opacity" Value="0.8" />
+    </Style>
+    <Style Selector="Slider.parameter-slider:disabled /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Background" Value="{Binding $parent[Slider].Foreground}" />
+        <Setter Property="Opacity" Value="0.65" />
+    </Style>
+    <Style Selector="Slider.parameter-slider:disabled /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Background" Value="#DFE7F0" />
+    </Style>
+    <Style Selector="Button.add-function:disabled">
+        <Setter Property="Foreground" Value="#64748B" />
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+    <Style Selector="Button.add-function:disabled /template/ ContentPresenter">
+        <Setter Property="Background" Value="#E8EEF6" />
+        <Setter Property="BorderBrush" Value="#DCE5EF" />
+        <Setter Property="Foreground" Value="#64748B" />
+    </Style>
+    <Style Selector="Button.delete-function:disabled, Button.color-picker:disabled, ToggleButton.visibility:disabled">
+        <Setter Property="Opacity" Value="0.55" />
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+    <Style Selector="Button.delete-function:disabled /template/ ContentPresenter, Button.color-picker:disabled /template/ ContentPresenter, ToggleButton.visibility:disabled /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="#94A3B8" />
     </Style>
 
     <Style Selector="GridSplitter.panel-divider">

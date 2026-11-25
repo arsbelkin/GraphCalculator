@@ -8,6 +8,8 @@ public class FunctionParameterModelView : ViewModelBase
     private double _maxValue = 10;
     private double _value = 1;
 
+    private double _oldValue = 1;
+
     public double MinValue
     {
         get => _minValue;
@@ -37,4 +39,12 @@ public class FunctionParameterModelView : ViewModelBase
                 SetProperty(ref this._value, System.Math.Clamp(value, MinValue, MaxValue));
         }
     }
+
+    public void OnProgressChanged(double progress)
+    {
+        Value = MinValue + (MaxValue - MinValue) * progress;
+    }
+    
+    public void SaveValue() => _oldValue = Value;
+    public void RestoreValue() => Value = _oldValue;
 }
