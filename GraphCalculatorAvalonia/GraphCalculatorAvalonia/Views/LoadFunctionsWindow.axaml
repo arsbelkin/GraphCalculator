@@ -6,6 +6,10 @@
         Background="#F8FAFC" Foreground="#0F172A">
     <Window.Styles>
         <StyleInclude Source="/Styles/CalculatorStyles.axaml" />
+        <Style Selector="Border.drop-zone">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
+        </Style>
         <Style Selector="Border.drop-zone.dragover">
             <Setter Property="Background" Value="#DBEAFE" />
             <Setter Property="BorderBrush" Value="#2563EB" />
@@ -17,7 +21,7 @@
             <TextBlock Classes="caption" Text="Текущий список будет заменён содержимым файла." />
         </StackPanel>
         <Border x:Name="DropZone" Classes="drop-zone" Grid.Row="1"
-                DragDrop.AllowDrop="True" Background="White" BorderBrush="#CBD5E1"
+                DragDrop.AllowDrop="True"
                 BorderThickness="2" CornerRadius="14" Padding="20">
             <StackPanel VerticalAlignment="Center" Spacing="14">
                 <Path Data="M 2,14 L 2,20 L 22,20 L 22,14 M 12,15 L 12,2 M 7,7 L 12,2 L 17,7"
